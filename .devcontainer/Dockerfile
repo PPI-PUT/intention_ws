@@ -1,11 +1,12 @@
-FROM ubuntu:jammy
+FROM nvidia/cuda:11.7.1-devel-ubuntu22.04
+
 ARG WORKSPACE
 ENV WORKSPACE=${WORKSPACE}
 
 ENV AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS=1
 ENV AMENT_PREFIX_PATH=/opt/ros/humble
 ENV COLCON_PREFIX_PATH=/opt/ros/humble
-ENV DEBIAN_FRONTEND=
+ENV DEBIAN_FRONTEND=noninteractive
 ENV LD_LIBRARY_PATH=/opt/ros/humble/lib
 ENV NVIDIA_DRIVER_CAPABILITIES=all
 ENV NVIDIA_VISIBLE_DEVICES=all
@@ -71,14 +72,35 @@ RUN python3 -m pip --no-cache-dir install \
 
 
 # install your custom packages
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#    package_name_1 \
-#    package_name_2
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libglib2.0-dev \
+    libboost-all-dev \
+    libusb-1.0-0-dev \
+    unzip \
+    net-tools \
+    iputils-ping \
+    nano
 
+RUN curl -L -o lcm-v1.4.0.tar.gz https://github.com/lcm-proj/lcm/archive/refs/tags/v1.4.0.tar.gz \
+    && tar -xzvf lcm-v1.4.0.tar.gz \
+    && rm lcm-v1.4.0.tar.gz \
+    && cd lcm-1.4.0 \
+    && mkdir build \
+    && cd build \
+    && cmake .. \
+    && make install
+
+RUN curl -L -o libtorch.zip https://download.pytorch.org/libtorch/cpu/libtorch-cxx11-abi-shared-with-deps-2.1.0%2Bcpu.zip \
+    && unzip libtorch.zip \
+    && rm libtorch.zip \
+    && mv libtorch /usr/local/lib/
+
+ENV Torch_DIR=/usr/local/lib/libtorch
+ENV CMAKE_CUDA_COMPILER=/usr/local/cuda/bin/nvcc
 
 # set up entrypoint
 COPY entrypoint /entrypoint
 ENTRYPOINT ["/entrypoint"]
 
 CMD ["/bin/bash"]
-LABEL maintainer="Amadeusz Szymko (amadeusz.szymko@put.poznan.pl)"
+LABEL maintainer="Maciej Krupka (maciej.p.krupka@student.put.poznan.pl)"
