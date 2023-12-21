@@ -73,6 +73,9 @@ RUN python3 -m pip --no-cache-dir install \
 
 # install your custom packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    ros-humble-joint-state-publisher-gui \
+    ros-humble-joint-state-publisher \
+    ros-humble-xacro \
     libglib2.0-dev \
     libboost-all-dev \
     libusb-1.0-0-dev \
