@@ -68,14 +68,19 @@ RUN curl -L https://raw.github.com/git/git/master/contrib/completion/git-prompt.
 
 # install python packages
 RUN python3 -m pip --no-cache-dir install \
-    setuptools==58.2.0
+    setuptools==58.2.0 \
+    && pip3 install pandas pyarrow
 
 
 # install your custom packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-joint-state-publisher-gui \
     ros-humble-joint-state-publisher \
+    ros-humble-gazebo-ros-pkgs \
+    ros-humble-imu-tools \
+    ros-humble-plotjuggler-ros \
     ros-humble-xacro \
+    ros-humble-rqt-* \ 
     libglib2.0-dev \
     libboost-all-dev \
     libusb-1.0-0-dev \
