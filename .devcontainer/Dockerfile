@@ -69,7 +69,7 @@ RUN curl -L https://raw.github.com/git/git/master/contrib/completion/git-prompt.
 # install python packages
 RUN python3 -m pip --no-cache-dir install \
     setuptools==58.2.0 \
-    && pip3 install pandas pyarrow
+    && pip3 install pandas pyarrow rosbags 
 
 
 # install your custom packages
