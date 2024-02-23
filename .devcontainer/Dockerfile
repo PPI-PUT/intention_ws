@@ -80,6 +80,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-imu-tools \
     ros-humble-plotjuggler-ros \
     ros-humble-xacro \
+    ros-humble-ros2-control \
     ros-humble-rqt-* \ 
     libglib2.0-dev \
     libboost-all-dev \
